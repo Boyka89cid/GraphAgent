@@ -45,8 +45,8 @@ class Neo4JLLMRouterTool:
         """Check if the Neo4j database is reachable."""
         try:
             return self.neo4j_adapter.verify_connection()
-        finally:
-            self.neo4j_adapter.close()
+        except Exception as e:
+            raise RuntimeError(f"Failed to connect to Neo4j: {str(e)}")
     
     def show_all_databases(self) -> list:
         """Show all databases in the Neo4j instance."""
@@ -57,6 +57,6 @@ class Neo4JLLMRouterTool:
             results.remove('system')  # Remove system database from results
             #await self.mcp.get_context().session.send_log_message("critical", f"Databases: {results}")
             return results
-        finally:
-            self.neo4j_adapter.close()
+        except Exception as e:
+            raise RuntimeError(f"Failed to fetch databases: {str(e)}")
     
